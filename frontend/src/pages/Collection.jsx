@@ -9,23 +9,23 @@ const Collection = () => {
   const [showFilter, setShowFilter] = useState(false);
   const [filterProducts, setFilterProducts] = useState(products);
   const [selectedCategories, setSelectedCategories] = useState([]);
-  const [selectedTypes, setSelectedTypes] = useState([]);
+  const [selectedSubCategories, setSelectedSubCategories] = useState([]); // State for subcategories
 
   useEffect(() => {
-    // Filter products based on search, selected categories, and types
+    // Filter products based on search, selected categories, and subcategories
     const filtered = products.filter((product) => {
       const categoryMatch =
         selectedCategories.length === 0 || selectedCategories.includes(product.category);
-      const typeMatch =
-        selectedTypes.length === 0 || selectedTypes.includes(product.type);
+      const subCategoryMatch =
+        selectedSubCategories.length === 0 || selectedSubCategories.includes(product.subCategory);
       const searchMatch =
         product.name.toLowerCase().includes(search.toLowerCase());
 
-      return categoryMatch && typeMatch && searchMatch;
+      return categoryMatch && subCategoryMatch && searchMatch;
     });
 
     setFilterProducts(filtered);
-  }, [selectedCategories, selectedTypes, products, search]); // Watch for changes in search
+  }, [selectedCategories, selectedSubCategories, products, search]); // Watch for changes in search and filters
 
   const handleCategoryChange = (e) => {
     const { value, checked } = e.target;
@@ -34,9 +34,9 @@ const Collection = () => {
     );
   };
 
-  const handleTypeChange = (e) => {
+  const handleSubCategoryChange = (e) => {
     const { value, checked } = e.target;
-    setSelectedTypes((prev) =>
+    setSelectedSubCategories((prev) =>
       checked ? [...prev, value] : prev.filter((item) => item !== value)
     );
   };
@@ -79,15 +79,15 @@ const Collection = () => {
         <div className={`border border-gray-300 pl-5 py-3 mt-5 ${showFilter ? '' : 'hidden'} sm:block`}>
           <p className="mb-3 text-sm font-medium">TYPE</p>
           <div className="flex flex-col gap-2 text-sm font-light text-gray-700">
-            {['Topwear', 'Bottomwear', 'Winterwear'].map((type) => (
-              <label key={type} className="flex gap-2">
+            {['Topwear', 'Bottomwear', 'Winterwear'].map((subCategory) => (
+              <label key={subCategory} className="flex gap-2">
                 <input
                   className="w-3"
                   type="checkbox"
-                  value={type}
-                  onChange={handleTypeChange}
+                  value={subCategory}
+                  onChange={handleSubCategoryChange}
                 />
-                {type}
+                {subCategory}
               </label>
             ))}
           </div>
