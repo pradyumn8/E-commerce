@@ -17,7 +17,7 @@ productRouter.post(
 );
 
 // Route to remove a product
-productRouter.delete('/remove/:id', removeProduct); // Use :id for better REST convention
+productRouter.post('/remove', removeProduct); // Use :id for better REST convention
 
 // Route to fetch a single product
 productRouter.get('/single/:id', singleProduct); // Use :id as a route parameter
