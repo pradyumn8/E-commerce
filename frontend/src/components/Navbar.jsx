@@ -58,15 +58,16 @@ const Navbar = () => {
         {/* Profile Dropdown */}
         <div className="relative">
           <img
-            onClick={() => setDropdownVisible(!dropdownVisible)}
+        //   DropDown Menu
+            onClick={() => token ? null : navigate('/login')}
             src={assets.profile_icon}
             className="w-5 cursor-pointer"
             alt="Profile"
           />
-          {dropdownVisible && (
+          {token && (
             <div className="absolute dropdown-menu right-0 pt-4 flex flex-col gap-2 w-36 py-3 px-5 bg-slate-100 text-center">
               <p className="cursor-pointer hover:text-black">My Profile</p>
-              <p className="cursor-pointer hover:text-black">Orders</p>
+              <p onClick={()=>navigate('/orders')} className="cursor-pointer hover:text-black">Orders</p>
               <p onClick={logout} className="cursor-pointer hover:text-black">Logout</p>
             </div>
           )}
