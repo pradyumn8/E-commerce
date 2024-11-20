@@ -21,7 +21,7 @@ const Login = () => {
           setToken(response.data.token);
           localStorage.setItem('token', response.data.token);
           toast.success('Registration successful!');
-        } else {
+        } else {  
           toast.error(response.data.message);
         }
       } else {

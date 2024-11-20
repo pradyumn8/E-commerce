@@ -19,45 +19,53 @@ const Add = ({token}) => {
   const [bestseller, setBestseller] = useState(false);
   const [sizes, setSizes] = useState([])
 
-  const onSubmitHandler = async (e)=>{
+  const onSubmitHandler = async (e) => {
     e.preventDefault();
-    try {
-      const formData = new FormData()
-
-      formData.append("name",name);
-      formData.append("description",description);
-      formData.append("price",price);
-      formData.append("category",category);
-      formData.append("subCategory",subCategory);
-      formData.append("bestseller",bestseller);
-      formData.append("sizes",sizes); //convert stringify when not work
-
-      image1 && formData.append("image1",image1);
-      image2 && formData.append("image2",image2);
-      image3 && formData.append("image3",image3);
-      image4 && formData.append("image4",image4);
-
-      const response = await axios.post(backendUrl + "/api/product/add",formData,{headers:{token}})
-
-      // console.log(response.data)
-      if (response.data.success) {
-        toast.success(response.data.message)
-        setName('')
-        setDescription('')
-        setImage1(false)
-        setImage2(false)
-        setImage3(false)
-        setImage4(false)
-        setPrice('')
-      } else{
-        toast.error(response.data.message)
-      }
-
-    } catch (error) {
-      console.log(error)
-      toast.error(error.message)
+  
+    // Validate sizes
+    if (sizes.length === 0) {
+      toast.error("Please select at least one size.");
+      return;
     }
-  }
+  
+    try {
+      const formData = new FormData();
+  
+      formData.append("name", name);
+      formData.append("description", description);
+      formData.append("price", price);
+      formData.append("category", category);
+      formData.append("subCategory", subCategory);
+      formData.append("bestseller", bestseller);
+      formData.append("sizes", JSON.stringify(sizes)); // Convert to string if needed
+  
+      image1 && formData.append("image1", image1);
+      image2 && formData.append("image2", image2);
+      image3 && formData.append("image3", image3);
+      image4 && formData.append("image4", image4);
+  
+      const response = await axios.post(backendUrl + "/api/product/add", formData, { headers: { token } });
+  
+      if (response.data.success) {
+        toast.success(response.data.message);
+        // Reset form fields
+        setName('');
+        setDescription('');
+        setImage1(false);
+        setImage2(false);
+        setImage3(false);
+        setImage4(false);
+        setPrice('');
+        setSizes([]);
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error(error.message);
+    }
+  };
+  
   return (
     <form className='flex flex-col w-full items-start gap-3'>
       <div>
@@ -137,14 +145,15 @@ const Add = ({token}) => {
             <p className={`${sizes.includes("L") ? "bg-pink-100" : "bg-pink-200"} px-3 py-1 cursor-pointer`}>L</p>
           </div>
 
-          <div onClick={() => setSizes(prev => prev.includes("XXL") ? prev.filter(item => item !== "XL") : [...prev, "XL"])}>
+          <div onClick={() => setSizes(prev => prev.includes("XL") ? prev.filter(item => item !== "XL") : [...prev, "XL"])}>
 
             <p className={`${sizes.includes("XL") ? "bg-pink-100" : "bg-pink-200"} px-3 py-1 cursor-pointer`}>XL</p>
           </div>
 
+          
           <div onClick={() => setSizes(prev => prev.includes("XXL") ? prev.filter(item => item !== "XXL") : [...prev, "XXL"])}>
 
-            <p className={`${sizes.includes("") ? "bg-pink-100" : "bg-pink-200"} px-3 py-1 cursor-pointer`}>XXL</p>
+            <p className={`${sizes.includes("XXL") ? "bg-pink-100" : "bg-pink-200"} px-3 py-1 cursor-pointer`}>XXL</p>
           </div>
         </div>
       </div>
@@ -157,7 +166,7 @@ const Add = ({token}) => {
       <button onClick={onSubmitHandler} className='w-28 py-3 mt-4 bg-black text-white' type="submit">ADD</button>
     </form>
   );
-
+  
 }
 
 export default Add

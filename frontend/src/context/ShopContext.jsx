@@ -18,12 +18,19 @@ const ShopContextProvider = (props) => {
     const navigate = useNavigate('');
 
     const addToCart = async (itemId, size) => {
+        if (!itemId) {
+            console.error("Product ID is missing.");
+            toast.error("An error occurred. Please try again.");
+            return; // Stop execution
+        }
+    
         if (!size) {
             toast.error("Select Product Size");
             return; // Stop execution
         }
+    
         let cartData = structuredClone(cartItems);
-
+    
         if (cartData[itemId]) {
             cartData[itemId][size] = (cartData[itemId][size] || 0) + 1;
         } else {
@@ -31,6 +38,7 @@ const ShopContextProvider = (props) => {
         }
         setCartItems(cartData);
     };
+    
 
     const getCartCount = () => {
         let totalCount = 0;
@@ -110,12 +118,13 @@ const ShopContextProvider = (props) => {
         getProductsData()
     },[])
 
-    useEffect(()=>{
-        if(!token && localStorage.getItem('token')){
-            setToken(localStorage.setItem('token'))
-            getUserCart(localStorage.getItem('token'))
+    useEffect(() => {
+        if (!token && localStorage.getItem('token')) {
+            setToken(localStorage.getItem('token')); // Correct this line
+            getUserCart(localStorage.getItem('token'));
         }
-    },[])
+    }, []);
+    
 
     const value = {
         products,
@@ -127,6 +136,7 @@ const ShopContextProvider = (props) => {
         setShowSearch,
         cartItems,
         addToCart,
+        setCartItems,
         getCartCount,
         updateQuantity,
         getCartAmount,
