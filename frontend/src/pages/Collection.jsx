@@ -25,7 +25,7 @@ const Collection = () => {
     });
 
     setFilterProducts(filtered);
-  }, [selectedCategories, selectedSubCategories, products, search]); // Watch for changes in search and filters
+  }, [selectedCategories, selectedSubCategories, products, search, showSearch]); // Watch for changes in search and filters
 
   const handleCategoryChange = (e) => {
     const { value, checked } = e.target;

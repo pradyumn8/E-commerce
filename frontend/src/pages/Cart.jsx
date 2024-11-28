@@ -9,7 +9,6 @@ const Cart = () => {
   const [cartData, setCartData] = useState([]);
 
   useEffect(() => {
-
     if (products.length > 0) {
       const tempData = [];
       for (const items in cartItems) {
@@ -27,7 +26,7 @@ const Cart = () => {
       // console.log(tempData);
     }
 
-  }, [cartItems, products]);
+  }, [cartItems,products]);
 
   return (
     <div className='border-t pt-14'>
@@ -60,7 +59,7 @@ const Cart = () => {
         <div className="w-full sm:w-[450px]">
           <CartTotal />
           <div className="w-full text-end">
-            <button onClick={() => navigate('/place-order')} className="bg-black text-white text-sm my-8 px-8 py-3">PROCEED TO PLACE ORDER</button>
+            <button onClick={()=>navigate('/place-order')} className="bg-black text-white text-sm my-8 px-8 py-3">PROCEED TO PLACE ORDER</button>
           </div>
         </div>
       </div>

@@ -1,7 +1,7 @@
-import { v2 as cloudinary } from 'cloudinary';
+import {v2 as cloudinary} from 'cloudinary'
 import productModel from '../models/productModel.js'
 
-// function for add product
+// Function for add product
 const addProduct = async (req, res) => {
     try {
         const { name, description, price, category, subCategory, sizes, bestseller } = req.body
@@ -22,31 +22,30 @@ const addProduct = async (req, res) => {
 
         // console.log(name, description, price, category, subCategory, sizes, bestseller)
         // console.log(imagesUrl)
-
         const productData = {
             name,
             description,
             category,
             price: Number(price),
             subCategory,
-            bestseller: bestseller === 'true' ? true : false,
-            sizes: sizes,
-            image: imagesUrl,
+            bestseller: bestseller === 'true'?true:false,
+            sizes: JSON.parse(sizes),
+            image:imagesUrl,
             date: Date.now()
         }
-
-        console.log(productData);
-        const product = new productModel(productData);
+        console.log(productData)
+        const product = new productModel(productData)
         await product.save()
 
-        res.json({ success: true, message: "Product Added" })
+        res.json({success:true,message:"Product Added"})
     } catch (error) {
         console.log(error)
-        res.json({ success: false, message: error.message })
+        res.json({success:false,message:error.message})
     }
 }
 
-// function for list product 
+
+// Function for list product
 const listProduct = async (req, res) => {
     try {
         const products = await productModel.find({});
@@ -57,7 +56,10 @@ const listProduct = async (req, res) => {
 
     }
 }
-// function for removing product 
+
+
+
+// Function for removing product
 const removeProduct = async (req, res) => {
     try {
         await productModel.findByIdAndDelete(req.body.id)
@@ -68,7 +70,10 @@ const removeProduct = async (req, res) => {
         res.json({ success: false, message: error.message })
     }
 }
-//function for single product info
+
+
+
+// Function for single product info
 const singleProduct = async (req, res) => {
     try {
         const { productId } = req.body

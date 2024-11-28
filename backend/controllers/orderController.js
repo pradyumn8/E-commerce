@@ -1,7 +1,6 @@
 import orderModel from "../models/orderModel.js";
 import userModel from "../models/userModel.js";
 
-
 // Placing orders using COD Method
 const placeOrder = async (req, res) => {
     try {
@@ -28,10 +27,12 @@ const placeOrder = async (req, res) => {
     }
 }
 
+
 // Placing orders using Stripe Method
 const placeOrderStripe = async (req, res) => {
 
 }
+
 
 // Placing orders using Razorpay Method
 const placeOrderRazorpay = async (req, res) => {
@@ -40,22 +41,31 @@ const placeOrderRazorpay = async (req, res) => {
 
 // All Orders data for Admin Panel
 const allOrders = async (req, res) => {
+    try {
+        const orders = await orderModel.find({})
+        res.json({success:true,orders})
+    } catch (error) {
+        console.log(error)
+        res.json({success:false,message:error.message})
+    }
+}
 
-}
-// user Order data for Frontend
+// User Order Data For Frontend
 const userOrders = async (req, res) => {
-try {
-    const {userId}=req.body
-    const orders = await orderModel.find({ userId })
-    res.json({success:true,orders})
-} catch (error) {
-    console.log(error)
-    res.json({success:false,message:error.message})
+    try {
+        const {userId} =req.body
+        const orders = await orderModel.find({userId})
+        res.json({success:true,orders})
+    } catch (error) {
+        console.log(error)
+        res.json({success:false,message:error.message})
+    }
 }
-}
-//Update order status from Admin Panle
+
+
+// update order status
 const updateStatus = async (req, res) => {
 
 }
 
-export { placeOrder, placeOrderStripe, placeOrderRazorpay, allOrders, userOrders, updateStatus }
+export { placeOrder, placeOrderRazorpay, placeOrderStripe, allOrders, userOrders, updateStatus }
