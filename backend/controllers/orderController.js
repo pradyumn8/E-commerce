@@ -125,26 +125,43 @@ const placeOrderRazorpay = async (req, res) => {
             items,
             address,
             amount,
-            paymentMethod: "Stripe",
+            paymentMethod: "razorpay",
             payment: false,
-            date: Date.now()
+            date: Date.now(),
         };
+
+        // Save the order to your database
         const newOrder = new orderModel(orderData);
         await newOrder.save();
 
+        // Options for Razorpay order creation
         const options = {
-            amount : amount * 100,
-            currency: currency.toUpperCase(),
-            receipt : newOrder._id.toString()
-        }
-        await razorpayInstance.orders(options, (error,orders)=>{
-            if (error) {
-                console.log(error)
-                return res.json({success:false,message:error})
-            }
-            res.json({success:true,order})
-        })
+            amount: amount * 100, // Convert amount to the smallest currency unit
+            currency: currency.toUpperCase(), // Ensure the currency code is uppercase
+            receipt: newOrder._id.toString(), // Receipt ID
+        };
 
+        // Create order using Razorpay's SDK
+        const order = await razorpayInstance.orders.create(options);
+
+        // Respond with the created order details
+        res.json({ success: true, order });
+    } catch (error) {
+        console.log(error);
+        res.json({ success: false, message: error.message });
+    }
+};
+
+const verifyRazorpay = async (req,res) => {
+    try {
+        const { userId, razorpay_order_id} = req.body
+        const orderInfo = await razorpayInstance.orders.fetch(razorpay_order_id)
+        // console.log(orderInfo)
+        if (orderInfo.status === 'paid') {
+            await orderModel.findByIdAndUpdate(orderInfo.receipt,{payment:true});
+            await userModel.findByIdAndUpdate(userId,{cartData:{}})
+            res.json({success:true,message:"Payment Failed"});
+        }
     } catch (error) {
         console.log(error);
         res.json({ success: false, message: error.message });
@@ -203,4 +220,4 @@ const updateStatus = async (req, res) => {
 };
 
 
-export {verifyStripe, placeOrder, placeOrderRazorpay, placeOrderStripe, allOrders, userOrders, updateStatus }
+export {verifyRazorpay,verifyStripe, placeOrder, placeOrderRazorpay, placeOrderStripe, allOrders, userOrders, updateStatus }
