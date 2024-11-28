@@ -6,6 +6,8 @@ import { ShopContext } from '../context/ShopContext';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 
+
+
 const PlaceOrder = () => {
   const [method, setMethod] = useState('cod');
   const {navigate, backendUrl, token, cartItems, setCartItems, getCartAmount, delivery_fee, products} = useContext(ShopContext)
@@ -62,6 +64,17 @@ const PlaceOrder = () => {
             toast.error(response.data.message)
           }
           break;
+          //  API Calls for Stripe
+          case 'stripe':
+            const responseStripe = await axios.post(backendUrl+'/api/order/stripe',orderData, {headers:{token}})
+            if (responseStripe.data.success) {
+              const {session_url} = responseStripe.data
+              window.location.replace(session_url)
+            } else {
+              toast.error(responseStripe.data.message)
+            }
+            break;
+
         default:
           break;
       }
