@@ -62,11 +62,19 @@ git clone https://github.com/pradyumn8/E-commerce.git
 4.Set up environment variables for database connection and other configurations.
 
 5.Start the backend, frontend and admin servers:
-### npm run server  # for backend
-### npm run dev  # for frontend
-### npm run dev  # for admin
 
-
+ ```bash
+    cd backend
+    npm run server  # for backend
+ ```
+ ```bash
+    cd frontend
+    npm run dev  # for frontend
+ ```
+ ```bash
+    cd admin
+    npm run dev  # for admin
+ ```
 #### 🎯 Visit http://localhost:5153 in your browser for the frontend.
 #### 🏢 Visit http://localhost:5154 in your browser for the admin panel.
 
